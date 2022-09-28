@@ -1,0 +1,9 @@
+# bind 127.0.0.1
+bind redis1
+protected-mode no
+port 7002
+pidfile /var/run/redis_7002.pid
+cluster-enabled yes
+daemonize yes
+cluster-config-file nodes-7002.conf
+cluster-node-timeout 15000
