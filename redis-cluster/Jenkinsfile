@@ -1,0 +1,27 @@
+node("Linux_Default"){
+    def git_repo_config = "ssh://git@stash.sigma.sbrf.ru:7999/~20078245/redis-cluster.git"
+    def git_branch_config = "master"
+    stage("Download source in bitbucket"){
+        dir("role") {
+            checkout([
+              $class: 'GitSCM',
+              branches: [[
+                name: git_branch_config
+              ]],
+              doGenerateSubmoduleConfigurations: false,
+              extensions: [],
+              gitTool: 'Default',
+              submoduleCfg: [],
+              userRemoteConfigs: [[
+                credentialsId: git_credentials_config,
+                url: git_repo_config
+              ]]
+            ])
+          }
+        }
+    stage("openshift deploy config init"){
+          dir("configs") {
+               ansiblePlaybook installation: 'ansible29', vaultCredentialsId: secret_vault, inventory: "${WORKSPACE}/role/inventory", playbook: "${WORKSPACE}/role/install_redis.yaml"
+          }
+        }
+}  

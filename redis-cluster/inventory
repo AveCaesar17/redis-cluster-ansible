@@ -1,6 +1,15 @@
 [all]
-server1 ansible_host=127.0.0.1 ansible_user=caesar ansible_password=caesar
-server2 ansible_host=127.0.0.1 ansible_user=caesar ansible_password=caesar
-server3 ansible_host=127.0.0.1 ansible_user=caesar ansible_password=caesar
+node1
+node2
+node3
 [master]
+node3
+[slave]
+node1
+node2
+[node1]
+server1 ansible_host=127.0.0.1 ansible_user=caesar ansible_password=caesar
+[node2]
+server2 ansible_host=127.0.0.1 ansible_user=caesar ansible_password=caesar
+[node3]
 server3 ansible_host=127.0.0.1 ansible_user=caesar ansible_password=caesar

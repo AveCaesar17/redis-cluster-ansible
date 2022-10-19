@@ -1,45 +1,48 @@
 ---
-
 # tasks file for install redis-cluster
 - block: #Block for RedHat
     - name: install redhat
       yum:
         name: redis
         state: latest
-
-     
-
   when: ansible_os_family == "RedHat"
-- block: #Block for Debian
-    - name: install apache for ubuntu 
-      apt:
-        name: redis
-        state: latest
-  when: ansible_os_family == "Debian"
-# - name: copy config file
-#   template: 
-#     src: "templetes/{{ item }}"
-#     dest: "/etc/redis/{{ item }}"
-#   with_fileglob: 
-#       - "redis_master.conf.j2" 
-#       - "redis_slave.conf.j2"
-- name: copy config file master
-  template: 
-    src: "redis_master.conf.j2"
-    dest: "{{ destin_folder }}/redis_master.conf"
-- name: copy config file slave
-  template: 
-    src: "redis_slave.conf.j2"
-    dest: "{{ destin_folder }}/redis_slave.conf"
-- name: start redis
-  shell:
-    cmd: "redis-server {{ item }}"
-  with_items:
-    - /etc/redis/redis_master.conf
-    - /etc/redis/redis_slave.conf
-- name: start cluster
- # debug: "redis-cli --cluster create {{ hostvars[groups['all'][0]].ansible_host }}:6379 {{ hostvars[groups['all'][0]].ansible_host }}:6381 {{ hostvars[groups['all'][0]].ansible_host }}:6380 {{ hostvars[groups['all'][0]].ansible_host }}:6379 {{ hostvars[groups['all'][0]].ansible_host }}:6380 {{ hostvars[groups['all'][0]].ansible_host }}:6381 --cluster-replicas 1"
-  shell: 
-    cmd: "redis-cli --cluster create {{ hostvars[groups['all'][0]].ansible_host }}:7001 {{ hostvars[groups['all'][0]].ansible_host }}:7002 {{ hostvars[groups['all'][0]].ansible_host }}:7001 {{ hostvars[groups['all'][0]].ansible_host }}:7002 {{ hostvars[groups['all'][0]].ansible_host }}:7001 {{ hostvars[groups['all'][0]].ansible_host }}:7002 --cluster-replicas 1"
+- block: #block for master
+  - name: copy config file redis master
+    template: 
+      src: "redis-master-sentinel.conf.j2"
+      dest: "/etc/redis-sentinel.conf"
+  - name: copy config file slave
+    template: 
+      src: "redis-master.conf.j2"
+      dest: "/etc/redis-master.conf"
+  - name: start redis
+    shell:
+      cmd: "redis-server /etc/redis-master.conf & redis-sentinel /etc/redis-sentinel.conf"
   when: inventory_hostname in groups['master']
+- block: #block for slave
+  - name: copy config file redis slave
+    template: 
+      src: "redis-sentinel-slave.conf.j2"
+      dest: "/etc/redis-sentinel.conf"
+  - name: copy config file slave
+    template: 
+      src: "redis-slave.conf.j2"
+      dest: "/etc/redis-slave.conf"
+  - name: start redis
+    shell:
+      cmd: "redis-server /etc/redis-slave.conf & redis-sentinel /etc/redis-sentinel.conf"
+  when: inventory_hostname in groups['slave']
+- name: instsall haproxy 
+  yum: 
+    name: haproxy
+    state: latest
+- name: copy haproxy conf 
+  template: 
+    src: "redis-sentinel-slave.conf.j2"
+    dest: "/etc/redis-sentinel.conf"
+- name: start haproxy
+  service:
+    name: haproxy
+    httpdstate: started
+
 

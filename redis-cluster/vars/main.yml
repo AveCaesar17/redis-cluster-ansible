@@ -1,34 +1,9 @@
-regestry:
-  domain: registry.sigma.sbrf.ru
-  space: ci00854520/ci01530661_sparta_portal
-oc: 
- deployment: 
-  phpfpm: 
-   count: 1
-secman:
-  nginx:
-    dev_stand: true
-    role: "ci00854520-edevgen2-portal-dev"
-    namespace: "CI00854520_CI00889975"
-    api_nginx_ca: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/nginx-ssl"
-    api_nginx_server_key: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/nginx-ssl"
-    nginx_key: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/nginx-ssl"
-    api_nginx_server_crt: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/nginx-ssl"
-    api_nginx_ca_crt: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/nginx-ssl"
-    nginx_crt: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/nginx-ssl"
-  phpfpm: 
-    role: "ci00854520-edevgen2-portal-dev"
-    namespace: "CI00854520_CI00889975"
-    app_cert_password_key_pub: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/portal-ssl" 
-    default_key_pem: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/portal-ssl" 
-    fpa_key_pem: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/portal-ssl"
-    orkestrator_key_pem: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/portal-ssl" 
-    default_ca_pem: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/portal-ssl" 
-    default_cert_pem: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/portal-ssl" 
-    fpa_ca_pem: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/portal-ssl"
-    fpa_cert_pem: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/portal-ssl" 
-    orkestrator_ca_pem: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/portal-ssl" 
-    orkestrator_cert_pem: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/portal-ssl" 
-    env: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/portal-pass-env"
-    env_sbt: "CI00854520_CI00889975/A/PORT/OSH/PORT1/KV/ci00854520-edevgen2-portal-dev/portal-env"
-    
+password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          37343162393835333863353537656165383233346565393737663964386635326236663336363634
+          3930306331636432313565393034333862656537623665650a616465333732666432386561343830
+          62663930356139363261633532353639616366343764666338333233393164303834393337313963
+          6534363663333539640a323965636336333235393635636536313266333236613964383837333131
+          6632
+port_redis: 6380
+port_sentinel: 26379
