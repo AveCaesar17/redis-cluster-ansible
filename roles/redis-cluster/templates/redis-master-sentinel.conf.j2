@@ -7,7 +7,7 @@ bind {{ ansible_host }}
 
 sentinel monitor mymaster {{ ansible_host }} {{ port_redis }} 2
 sentinel down-after-milliseconds mymaster 5000 
-
+daemonize yes
 protected-mode no
 sentinel failover-timeout mymaster 6000
 sentinel auth-pass mymaster {{ password }}

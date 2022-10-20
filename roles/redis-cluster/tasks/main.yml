@@ -1,11 +1,10 @@
 ---
 # tasks file for install redis-cluster
-- block: #Block for RedHat
-    - name: install redhat
-      yum:
-        name: redis
-        state: latest
-  when: ansible_os_family == "RedHat"
+# - block: #Block for RedHat
+#     - name: install redhat
+#       shell: "yum --enablerepo=remi install redis"
+       
+#   when: ansible_os_family == "RedHat"
 - block: #block for master
   - name: copy config file redis master
     template: 
@@ -18,7 +17,7 @@
   - name: start redis
     shell:
       cmd: "redis-server /etc/redis-master.conf & redis-sentinel /etc/redis-sentinel.conf"
-  when: inventory_hostname in groups['master']
+  when: inventory_hostname in groups["master"]
 - block: #block for slave
   - name: copy config file redis slave
     template: 

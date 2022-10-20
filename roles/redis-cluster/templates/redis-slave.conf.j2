@@ -3,27 +3,24 @@ bind {{ ansible_host }}
 
 protected-mode no
 
-port {{ port_redis }}
+port  {{ port_redis }}
 
 tcp-backlog 511
 
 timeout 0
 
-
 tcp-keepalive 300
 
-daemonize no
+daemonize yes
 
 supervised no
 
 
 pidfile "/var/run/redis_{{ port_redis }}.pid"
 
-
 loglevel notice
 
 logfile "/var/log/redis/redis.log"
-
 
 databases 16
 
@@ -36,15 +33,22 @@ save 300 10
 save 60 10000
 
 stop-writes-on-bgsave-error yes
+
+
 rdbcompression yes
+
+
 rdbchecksum yes
+
 dbfilename "dump.rdb"
 
 
 dir "/var/lib/redis"
 
+masterauth "{{ password }}"
+requirepass "{{ password }}"
 
-
+#
 replica-serve-stale-data yes
 
 
@@ -53,61 +57,49 @@ replica-read-only yes
 
 repl-diskless-sync no
 
-
 repl-diskless-sync-delay 5
+
 
 repl-disable-tcp-nodelay no
 
+
 replica-priority 100
-
-requirepass "{{ password }}"
-masterauth "{{ password }}"
-
 
 lazyfree-lazy-eviction no
 lazyfree-lazy-expire no
 lazyfree-lazy-server-del no
 replica-lazy-flush no
 
+
 appendonly no
 
+# The name of the append only file (default: "appendonly.aof")
 
 appendfilename "appendonly.aof"
-
+appendfsync everysec
 no-appendfsync-on-rewrite no
 
 auto-aof-rewrite-percentage 100
 auto-aof-rewrite-min-size 64mb
-
-
 aof-load-truncated yes
-
-
 aof-use-rdb-preamble yes
-
-
 lua-time-limit 5000
-
-cluster-require-full-coverage yes
-
+slowlog-log-slower-than 10000
 
 slowlog-max-len 128
- 
-latency-monitor-threshold 0
 
+latency-monitor-threshold 0
 
 notify-keyspace-events ""
 
+hash-max-ziplist-entries 512
+hash-max-ziplist-value 64
 list-max-ziplist-size -2
-
 list-compress-depth 0
-
 set-max-intset-entries 512
-
 
 zset-max-ziplist-entries 128
 zset-max-ziplist-value 64
-
 
 hll-sparse-max-bytes 3000
 
@@ -128,3 +120,5 @@ aof-rewrite-incremental-fsync yes
 
 rdb-save-incremental-fsync yes
 
+replicaof {{ hostvars["server1"].ansible_host }} {{ port_redis }}
+slaveof {{ hostvars["server1"].ansible_host }} {{ port_redis }} 
