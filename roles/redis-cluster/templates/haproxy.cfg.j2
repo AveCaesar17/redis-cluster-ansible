@@ -82,9 +82,9 @@ mode tcp
     tcp-check expect string role:master
     tcp-check send QUIT\r\n
     tcp-check expect string +OK
-    server Redis1 {{ hostvars["server1"].ansible_host }}:{{ port_redis }} check inter 3s
-    server Redis2 {{ hostvars["server2"].ansible_host }}:{{ port_redis }} check inter 3s  
-    server Redis3 {{ hostvars["server3"].ansible_host }}:{{ port_redis }} check inter 3s
+  {% for host in groups['all'] %}
+  server {{ host }} {{ hostvars[host].ansible_host }}:{{ port_redis }} check inter 3s
+  {% endfor %}
 #---------------------------------------------------------------------
 # static backend for serving up images, stylesheets and such
 #---------------------------------------------------------------------

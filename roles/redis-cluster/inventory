@@ -1,5 +1,9 @@
-[master]
+[all]
 server1 ansible_host=192.168.1.19 ansible_user=root 
-[slave]
 server2 ansible_host=192.168.1.18 ansible_user=root 
 server3 ansible_host=192.168.1.17 ansible_user=root 
+[master]
+server1
+[slave]
+server2
+server3
